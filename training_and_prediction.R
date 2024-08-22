@@ -170,7 +170,7 @@ if (length(labels) > 0) {
       legend.bg.color = "white",
       legend.bg.alpha = 0.8,
       outer.margins = c(0.1, 0.1, 0.1, 0.1), 
-      title = "Land Use Classification of Viti Levu, Fiji, using a Spatially Validated Random Forest Model",
+      title = "Land Use Classification of Viti Levu, Fiji, using a Random Forest trained Model of Fiji",
       title.position = c("left", "top"),
       title.size = 0.4
     ) +
