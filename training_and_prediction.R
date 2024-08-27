@@ -13,7 +13,7 @@ library(caret)
 library(sf)
 library(CAST)
 library(tmap)
-library(cluster)
+library(blockCV)
 
 # set wd - this may have to be adjusted
 setwd("path/to/data")
