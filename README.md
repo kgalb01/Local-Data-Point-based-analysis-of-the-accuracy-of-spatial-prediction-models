@@ -13,7 +13,7 @@ NOTE: At this point the bibliography is incomplete and it's supposed to be compl
 
 ## Case Study
 - Chosen for their contrasting geographical characteristics to test the LPD approach across diverse landscapes the Fiji Islands and Rhineland-Palatinate act as case study areas.
-- The reasoning for chosing Fiji is simply the availability of high-quality training data with ground truthing with diverse land cover classes (Source).
+- One of the reasons for chosing Fiji is the availability of high-quality training data with ground truthing with diverse land cover classes (Source).
 - The plan is to be using these existing training data to model land use and land cover (LULC) classifications in R, leveraging the LPD for better accuracy. 
 - Rhineland-Palatinate was picked for its geographical contrast to Fiji but at the same time its similar size, which allows for comparable data distribution.
   * The training data for Rhineland-Palatinate was created using a R script that picks n random points out of the official DLM for Rhineland-Palatinate (Source).
