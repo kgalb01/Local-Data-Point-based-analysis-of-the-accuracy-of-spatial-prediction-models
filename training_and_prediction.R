@@ -46,13 +46,14 @@ germ_60x60 <- rast("path/to/germ_60x60_uncropped.grd")
 
 
 
-
 #' train_model:
-#' This function trains a Random Forest model using a simple data partitioning method and cross-validation.
+#' This function trains a Random Forest model using spatial cross-validation with the blockCV package.
+#' It automatically calculates an appropriate block size for spatial cross-validation based on point density.
+#' 
 #' @param extr_data A data frame containing predictor variables and labels for training.
-#' @param training_data A spatial object with coordinates used for training (not directly used in this function).
+#' @param training_data A spatial object (sf or SpatialPoints) with coordinates used for spatial cross-validation.
+#' @param raster_data A SpatRaster object representing the study area, used for defining spatial blocks.
 #' @param ntree The number of trees to grow in the Random Forest model (default is 500).
-#' @param data_partition The proportion of data to be used for training (default is 0.7).
 #' @param cv_folds The number of cross-validation folds (default is 10).
 #' @param seed A seed for reproducibility (default is 321).
 #'
@@ -60,30 +61,50 @@ germ_60x60 <- rast("path/to/germ_60x60_uncropped.grd")
 #' @export
 #'
 #' @examples
-#' model <- train_model(extr_data, training_data, ntree = 500, data_partition = 0.7, cv_folds = 10, seed = 321)
-train_model <- function(extr_data, training_data, ntree = 500, data_partition = 0.7, cv_folds = 10, seed = 321) {
+#' model <- train_model(extr_data, training_data, raster_data, ntree = 500, cv_folds = 10, seed = 321)
+train_model <- function(extr_data, training_data, raster_data, ntree = 500, cv_folds = 10, seed = 321) {
   
   # Set a seed for reproducibility
   set.seed(seed)
   
-  # Partition the data into training and testing sets based on the specified proportion
-  trainIndex <- createDataPartition(extr_data$Label, p = data_partition, list = FALSE)
+  # Calculate the area of the study region in square meters
+  area <- expanse(as.polygons(ext(raster_data), crs = crs(raster_data)), unit = "m")
   
-  # Subset the data into training and testing datasets
-  trainDat <- extr_data[trainIndex, ]
-  testDat <- extr_data[-trainIndex, ]
+  # Calculate the number of sample points
+  num_points <- nrow(training_data)
+  
+  # Calculate point density (points per square meter)
+  point_density <- num_points / area
+  
+  # Determine block size based on point density and study area
+  block_area <- 1 / point_density
+  
+  # Block size (side length of the square) in meters
+  block_size <- sqrt(block_area)
+  
+  # Create spatial blocks for cross-validation
+  spatial_blocks <- cv_spatial(x = training_data,
+                               column = "Label",
+                               r = raster_data,
+                               k = cv_folds,
+                               size = block_size,
+                               selection = "random",
+                               iteration = 100)
+  
+  # Extract the folds
+  folds <- spatial_blocks$folds
   
   # Define predictor variables by excluding the label column
-  predictors <- colnames(trainDat)[colnames(trainDat) != "Label"]
+  predictors <- colnames(extr_data)[colnames(extr_data) != "Label"]
   
   # Train a Random Forest model using the training data and specified parameters
-  model <- train(trainDat[, predictors], 
-                 trainDat$Label,
+  model <- train(extr_data[, predictors], 
+                 extr_data$Label,
                  method = "rf",
                  importance = TRUE,      # Calculate variable importance
                  ntree = ntree,          # Number of trees in the forest
                  seed = seed,            # Seed for reproducibility
-                 trControl = trainControl(method = "cv", number = cv_folds))  # Cross-validation
+                 trControl = trainControl(method = "cv", index = folds))  # Spatial cross-validation
   
   # Return the trained model
   return(model)
