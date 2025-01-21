@@ -1,6 +1,6 @@
 # Local Data Point Density-basierte Analyse der Genauigkeit von räumlichen Vorhersagemodellen
 # Author: Kieran Galbraith
-# Date: 2024-06-08
+# Date: 2025-01-20
 # Description: R Script to convert DLM to trainingsdata for Rhineland-Palatinate
 # Source for DLM: https://lvermgeo.rlp.de/produkte/geotopografie/digitale-landschaftsmodelle-dlm/digitales-basislandschaftsmodell-basis-dlm
 
