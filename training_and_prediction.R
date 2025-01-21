@@ -1,6 +1,6 @@
 # Local Data Point Density-based analysis of spatial prediction models
 # Author: Kieran Galbraith
-# Date: 2024-06-09
+# Date: 2025-20-01
 # Description: R Script to predict data on basis of random forest trained model
 
 # delete env
@@ -13,7 +13,9 @@ library(caret)
 library(sf)
 library(CAST)
 library(tmap)
+library(cluster)
 library(blockCV)
+library(mapac)
 
 # set wd - this may have to be adjusted
 setwd("path/to/data")
@@ -46,69 +48,57 @@ germ_60x60 <- rast("path/to/germ_60x60_uncropped.grd")
 
 
 
+
 #' train_model:
-#' This function trains a Random Forest model using spatial cross-validation with the blockCV package.
-#' It automatically calculates an appropriate block size for spatial cross-validation based on point density.
-#' 
+#' This function trains a Random Forest model using spatial cross-validation with kNNDM.
 #' @param extr_data A data frame containing predictor variables and labels for training.
-#' @param training_data A spatial object (sf or SpatialPoints) with coordinates used for spatial cross-validation.
-#' @param raster_data A SpatRaster object representing the study area, used for defining spatial blocks.
+#' @param training_data A spatial object with coordinates used for creating spatial folds.
+#' @param raster_data A raster object representing the study area for spatial fold creation.
 #' @param ntree The number of trees to grow in the Random Forest model (default is 500).
-#' @param cv_folds The number of cross-validation folds (default is 10).
+#' @param k The number of cross-validation folds to create using kNNDM (default is 10).
 #' @param seed A seed for reproducibility (default is 321).
 #'
 #' @return A trained Random Forest model object.
 #' @export
 #'
 #' @examples
-#' model <- train_model(extr_data, training_data, raster_data, ntree = 500, cv_folds = 10, seed = 321)
-train_model <- function(extr_data, training_data, raster_data, ntree = 500, cv_folds = 10, seed = 321) {
+#' model <- train_model(extr_data, training_data, raster_data, ntree = 500, k = 10, seed = 321)
+train_model <- function(extr_data, training_data, raster_data, ntree = 500, k = 10, seed = 321) {
   
-  # Set a seed for reproducibility
+  # Set seed for reproducibility
   set.seed(seed)
   
-  # Calculate the area of the study region in square meters
-  area <- expanse(as.polygons(ext(raster_data), crs = crs(raster_data)), unit = "m")
+  # Create spatial folds using kNNDM
+  knndm_folds <- knndm(
+    tpoints = training_data,          # Training points (sf object)
+    modeldomain = raster_data,       # Prediction area (SpatRaster)
+    k = k                            # Number of folds
+  )
   
-  # Calculate the number of sample points
-  num_points <- nrow(training_data)
-  
-  # Calculate point density (points per square meter)
-  point_density <- num_points / area
-  
-  # Determine block size based on point density and study area
-  block_area <- 1 / point_density
-  
-  # Block size (side length of the square) in meters
-  block_size <- sqrt(block_area)
-  
-  # Create spatial blocks for cross-validation
-  spatial_blocks <- cv_spatial(x = training_data,
-                               column = "Label",
-                               r = raster_data,
-                               k = cv_folds,
-                               size = block_size,
-                               selection = "random",
-                               iteration = 100)
-  
-  # Extract the folds
-  folds <- spatial_blocks$folds
+  # Extract folds for cross-validation
+  folds <- knndm_folds$indx_train
   
   # Define predictor variables by excluding the label column
   predictors <- colnames(extr_data)[colnames(extr_data) != "Label"]
   
-  # Train a Random Forest model using the training data and specified parameters
-  model <- train(extr_data[, predictors], 
-                 extr_data$Label,
-                 method = "rf",
-                 importance = TRUE,      # Calculate variable importance
-                 ntree = ntree,          # Number of trees in the forest
-                 seed = seed,            # Seed for reproducibility
-                 trControl = trainControl(method = "cv", index = folds))  # Spatial cross-validation
+  # Train Random Forest model
+  model <- train(
+    x = extr_data[, predictors],     # Predictor variables
+    y = extr_data$Label,             # Target variable
+    method = "rf",                   # Random Forest algorithm
+    importance = TRUE,               # Calculate variable importance
+    ntree = ntree,                   # Number of trees in the forest
+    trControl = trainControl(
+      method = "cv",                 # Cross-validation method
+      index = folds,                 # Folds from kNNDM
+      savePredictions = "final"      # Save final predictions
+    )
+  )
   
-  # Return the trained model
+  # Return trained model
   return(model)
 }
+
 
 
 # Beispielaufruf der Funktion
@@ -151,13 +141,83 @@ writeRaster(prediction_rlp_10x10, "path/to/prediction_rlp_10x10.tif", overwrite 
 # repeat for RLP and GERM
 # ...
 
+
+
+#################
+# evaluate model accuracy for stratified models according to Pflugmacher, 2024
+
+#' evaluate_model_accuracy:
+#' This function processes spatial training and prediction data for stratified accuracy assessment.
+#' @param prediction_raster A raster object containing predicted classes (e.g., multispectral prediction raster).
+#' @param training_points A spatial vector containing training points with strata and reference labels.
+#' @param strata_ids A vector of unique strata IDs (e.g., 1:8).
+#' @param stratum_pixel_counts A numeric vector containing the number of pixels per stratum.
+#' @param seed A seed for reproducibility (default is 321).
+#'
+#' @return A list containing stratified accuracy statistics, overall accuracy, User's and Producer's accuracy, and estimated area proportions per class.
+#' @export
+#'
+#' @examples
+#' accuracy_results <- evaluate_model_accuracy(prediction_raster = prediction_fiji_10x10, 
+#'                                             training_points = train_fiji, 
+#'                                             strata_ids = 1:8, 
+#'                                             stratum_pixel_counts = c(1779768, 3549325, 541204, 687659, 14279258, 15115599, 4972515, 116131948))
+evaluate_model_accuracy <- function(prediction_raster, training_points, strata_ids, stratum_pixel_counts, seed = 456) {
+  # Set seed for reproducibility
+  set.seed(seed)
+  
+  # Convert training points to spatial vector and filter by raster extent
+  training_vect <- vect(training_points)
+  raster_extent <- ext(prediction_raster)
+  filtered_points <- crop(training_vect, raster_extent)
+  
+  # Extract predictions for filtered training points
+  predictions <- terra::extract(prediction_raster, filtered_points, ID = FALSE)
+  
+  # Extract strata, reference labels, and predicted classes
+  strata <- filtered_points$strata
+  reference <- filtered_points$Label
+  map <- predictions$class
+  
+  # Ensure class consistency between reference and map
+  all_classes <- union(unique(reference), unique(map))
+  reference <- factor(reference, levels = all_classes)
+  map <- factor(map, levels = all_classes)
+  
+  # Validate lengths of strata, reference, and map
+  stopifnot(length(strata) == length(reference))
+  stopifnot(length(strata) == length(map))
+  
+  # Perform stratified accuracy assessment
+  accuracy_stats <- aa_stratified(
+    stratum = strata,                # Stratum IDs
+    reference = reference,           # Reference classes
+    map = map,                       # Predicted classes
+    h = strata_ids,                  # Unique strata IDs
+    N_h = stratum_pixel_counts       # Pixel counts per stratum
+  )
+  
+  # Return stratified accuracy results
+  return(accuracy_stats)
+}
+
+accuracy_results <- evaluate_model_accuracy(prediction_raster = prediction_fiji_10x10, 
+                                            training_points = train_fiji, 
+                                            strata_ids = 1:8, 
+                                            stratum_pixel_counts = c(1779768, 3549325, 541204, 687659, 14279258, 15115599, 4972515, 116131948))
+
+# Save the accuracy results
+saveRDS(accuracy_fiji, file = "path/to/accuracy_fiji_results.RDS")
+
+
+
 #################
 # set prediction color scheme for better plotting
-rediction_colorscheme_fiji <- c("Agriculture" = "yellow", "Grassland" = "green", "Mangrove" = "royalblue2", 
-                                 "Rock" = "azure4", "Shrubland" = "brown", "Tree" = "darkgreen", 
+prediction_colorscheme_fiji <- c("Agriculture" = "bisque1", "Grassland" = "green", "Mangrove" = "royalblue2", 
+                                 "Rock" = "azure4", "Shrubland" = "darkgoldenrod2", "Tree" = "darkgreen", 
                                  "Urban" = "red", "Water" = "cyan")
 
-prediction_colorscheme_rlp <- c("Agriculture" = "yellow","Urban" = "red","Vegetation" = "darkgreen","Water" = "cyan")
+prediction_colorscheme_rlp <- c("Agriculture" = "bisque1","Urban" = "red","Vegetation" = "darkgreen","Water" = "cyan")
 
 # Ensure the colors match the classes
 labels <- levels(factor(fiji_10x10_RF_model$levels))
@@ -203,9 +263,9 @@ tmap_save(map, "prediction_fiji_10x10.png")
 # ...
 
 # set prediction color scheme for better plotting
-prediction_colorscheme_fiji_modified <- c("Agriculture" = "yellow", "Grassland" = "green", "Mangrove" = "royalblue2", 
-                                          "Rock" = "black", "Shrubland" = "brown", "Urban" = "red", "Water" = "cyan")
+prediction_colorscheme_fiji_modified <- c("Agriculture" = "bisque1", "Grassland" = "green", "Mangrove" = "royalblue2", 
+                                          "Rock" = "azure4", "Shrubland" = "darkgoldenrod2", "Urban" = "red", "Water" = "cyan")
 
-prediction_colorscheme_rlp_modified <- c("Agriculture" = "yellow","Urban" = "red","Water" = "cyan")
+prediction_colorscheme_rlp_modified <- c("Agriculture" = "bisque1","Urban" = "red","Water" = "cyan")
 
 # ...
