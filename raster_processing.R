@@ -1,6 +1,6 @@
 # Local Data Point Density-based analysis of spatial prediction models
 # Author: Kieran Galbraith
-# Date: 2024-06-08
+# Date: 2025-01-20
 # Description: R Script to process Sentinel-2 data from Fijis and Germany
 # data downloaded from Google Earth Engine: https://code.earthengine.google.com/
 
