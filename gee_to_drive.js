@@ -1,7 +1,7 @@
 /*
 * Local Data Point Density-based analysis of spatial prediction models
 * Author: Kieran Galbraith
-* Date: 2024-08-22
+* Date: 2025-01-20
 * Description: JS Script to download Sentinel-2 data from Google Earth Engine and export to Google Drive
 * NOTE: Only works in Google Earth Engine Code Editor
 */
