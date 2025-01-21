@@ -1,6 +1,6 @@
 # Local Data Point Density-based analysis of spatial prediction models
 # Author: Kieran Galbraith
-# Date: 2024-06-08
+# Date: 2025-01-20
 # Description: R Script to slightly modify trainingdata from fiji
 # for easier processing during modeltraining
 # Link to the data: https://pacificdata.org/data/dataset/fiji-land-use-land-cover-test-dataset
@@ -51,4 +51,3 @@ modified_fiji_data <- list(type = "FeatureCollection", features = modified)
 # converting that to a dataframe would be possible but this way it's easier
 output_file <- "modified_fiji_training_data.geojson"
 write_json(modified_fiji_data, path = output_file)
-
