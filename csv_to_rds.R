@@ -1,6 +1,6 @@
 # Local Data Point Density-based analysis of spatial prediction models
 # Author: Kieran Galbraith
-# Date: 2024-08-08
+# Date: 2025-01-20
 # Description: R Script to convert .CSV file containing the extraction data from Google Earth Engine to .RDS File
 
 
@@ -10,7 +10,7 @@ library(readr)
 # Define the path to the .CSV file
 csv_file_path_fiji <- "path/to/fiji_training_extr.csv"
 
-csv_file_path_rlp <- "C:/Users/kgalb/Documents/Workspace/R/Local Data Point Density-basierte Analyse der Genauigkeit von räumlichen Vorhersagemodellen/training/germany/rlp_training_extr.csv"
+csv_file_path_rlp <- "path/to/rlp_training_extr.csv"
 
 
 # repeat with modified data
