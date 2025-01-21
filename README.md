@@ -20,21 +20,21 @@ This work aims to evaluate the accuracy of spatial prediction models using the "
 
 
 ## Results
-- To evaluate the spatial prediction models, metrics from the `caret` package in R, such as accuracy and kappa, were used as a baseline. These metrics were supplemented by the `CAST` package to assess the models' applicability and reliability on unseen data.
-- Accuracy measures correct predictions against held-back training data, while kappa accounts for correct predictions occurring by chance. These metrics, though informative, have limitations and were compared with the extended metrics of `CAST` (AOA, DI, and LPD).
+- To evaluate the spatial prediction models, metrics from the `caret` package in R, such as cross validation accuracy and kappa, were used as a baseline. These metrics were supplemented by the `CAST` package to assess the models' applicability and reliability on unseen data.
 - The results were analyzed across different applications:
-  1. **Rhineland-Palatinate (RLP):**
-     - The RLP model achieved high accuracy (0.85) and kappa (0.78) despite outdated training data.
-     - AOA showed 0.68% rejection, with uncertainties primarily in urban areas like Koblenz, Trier, and Mannheim.
-     - DI confirmed high similarity between training and raster data, with urban and water bodies standing out as high-uncertainty regions.
-     - LPD highlighted areas of reliability, with forests and vegetation showing the strongest performance.
-  2. **Germany:**
-     - When applied to Germany, accuracy slightly declined. The AOA rejected 1.41% of data, primarily water bodies and islands.
-     - DI values indicated greater dissimilarity in northern and eastern Germany, while southern regions showed better applicability.
-     - LPD results confirmed RLP as the region with the highest similarity to the training data, with forests performing well.
-  3. **Fiji:**
-     - Applying the RLP model to Fiji led to 23.47% rejection by the AOA, with large water bodies, coral reefs, and mangroves classified as unreliable.
-     - DI and LPD showed that the model was unsuitable for tropical regions, with high rejection rates and low reliability, particularly for vegetation classes.
+- **Model of RLP:**
+    1. **Rhineland-Palatinate (RLP):**
+       - The RLP model achieved high accuracy (0.85) and kappa (0.78) despite outdated training data.
+       - AOA showed 0.68% rejection, with uncertainties primarily in urban areas like Koblenz, Trier, and Mannheim.
+       - DI confirmed high similarity between training and raster data, with urban and water bodies standing out as high-uncertainty regions.
+       - LPD highlighted areas of reliability, with forests and vegetation showing the strongest performance.
+    2. **Germany:**
+       - When applied to Germany, accuracy slightly declined. The AOA rejected 1.41% of data, primarily water bodies and islands.
+       - DI values indicated greater dissimilarity in northern and eastern Germany, while southern regions showed better applicability.
+       - LPD results confirmed RLP as the region with the highest similarity to the training data, with forests performing well.
+    3. **Fiji:**
+       - Applying the RLP model to Fiji led to 23.47% rejection by the AOA, with large water bodies, coral reefs, and mangroves classified as unreliable.
+       - DI and LPD showed that the model was unsuitable for tropical regions, with high rejection rates and low reliability, particularly for vegetation classes.
   
 - **Model of Fiji:**
   - Accuracy (0.58) and kappa (0.50) were lower than RLP's model. Stratified accuracy rose to 0.69 but did not meet the target of 0.75 for each class.
@@ -51,6 +51,7 @@ This work aims to evaluate the accuracy of spatial prediction models using the "
 - The RLP model outperformed expectations despite outdated training data but faced challenges with urban areas and water bodies.
 - The Fiji model, trained on ground-truthed data, showed greater adaptability but struggled with class-specific misclassifications, particularly for agricultural areas in RLP.
 - Metrics from `CAST` provided critical insights into model applicability, with LPD being the most robust in identifying areas of low reliability.
+- Cross validation accuracy measures correct predictions against held-back training data, while kappa accounts for correct predictions occurring by chance. These metrics, though informative, have limitations and were compared with the extended metrics of `CAST` (AOA, DI, and LPD).
 - Modifications to training data confirmed the influence of dominant classes on model performance and highlighted the importance of comprehensive training datasets for cross-regional applications.
 
 
