@@ -9,6 +9,10 @@ This work aims to evaluate the accuracy of spatial prediction models using the "
 - The "Local Data Point Density" (LPD) improves AOA by considering both distance and data density, enhancing model accuracy in clustered areas (Schumacher et al., 2024).
 - This study evaluates LPD's effectiveness in improving spatial prediction models.
 
+![Diagram illustrating how the LPD works](example/misc/lpd_diagram_screenshot.jpg)
+
+Figure 1: Diagram illustrating how the LPD works (Source: Schumacher, F. (2023). Development of a local data point density approach to assess the area of applicability for spatial prediction models.)
+
 ## Case Study
 - The Fiji Islands, Rhineland-Palatinate (RLP), and Germany were chosen as case study areas to evaluate the LPD approach across diverse landscapes and test the transferability of the model.
 - Fiji was selected for its contrasting geographical and climatic characteristics and the availability of high-quality training data, created through ground truthing, with diverse land cover classes (Duncan, 2023). These data include eight classes, with a balanced distribution for improved classification accuracy.
@@ -35,7 +39,7 @@ This work aims to evaluate the accuracy of spatial prediction models using the "
     3. **Fiji:**
        - Applying the RLP model to Fiji led to 23.47% rejection by the AOA, with large water bodies, coral reefs, and mangroves classified as unreliable.
        - DI and LPD showed that the model was unsuitable for tropical regions, with high rejection rates and low reliability, particularly for vegetation classes.
-  
+
 - **Model of Fiji:**
   - Accuracy (0.58) and kappa (0.50) were lower than RLP's model. Stratified accuracy rose to 0.69 but did not meet the target of 0.75 for each class.
   - AOA rejected 1.56% of data, with coral reefs along the coast flagged as unreliable.
@@ -46,6 +50,19 @@ This work aims to evaluate the accuracy of spatial prediction models using the "
   - Removing dominant classes (`Vegetation` for RLP, `Tree` for Fiji) improved accuracy and kappa slightly but reduced the reliability of predictions (as indicated by LPD).
   - Modifications revealed limitations in the AOA, which was influenced by outliers in the DI, but LPD consistently highlighted regions where data were insufficient.
   - Modified datasets failed to improve applicability across regions and emphasized the importance of balanced class representation.
+
+## Plots and Figures
+
+| ![Prediction plot of RLP including the AOA](example/aoa/aoa_rlp_model.png) | ![Prediction plot of Viti Levu, Fiji including the AOA](example/aoa/aoa_fiji_model.png) |
+|:-------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------:|
+| *Figure 2: Prediction plot of RLP, calculated based on the training data of RLP. Includes the AOA (marked in black).* | *Figure 3: Prediction plot of Viti Levu, Fiji, calculated based on the training data of Fiji. Includes the AOA (marked in black).* |
+
+<br>
+
+| ![LPD plot of Viti Levu, Fiji, model of Fiji](example/lpd/lpd_fiji_model.png) | ![LPD plot of Viti Levu, Fiji, model of RLP](example/lpd/fiji_lpd_rlp_model.png) |
+|:---------------------------------------------------------------------------:|:------------------------------------------------------------------------------:|
+| *Figure 4: LPD plot of Viti Levu, Fiji, calculated based on the training data of Fiji.* | *Figure 5: LPD plot of Viti Levu, Fiji, calculated based on the training data of RLP.* |
+
 
 ## Conclusions:
 - The RLP model outperformed expectations despite outdated training data but faced challenges with urban areas and water bodies.
