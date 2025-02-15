@@ -73,6 +73,7 @@ Figure 1: Diagram illustrating how the LPD works (Source: Schumacher et al., 202
 
 
 ## Bibliography
+- Duncan, J. (2023). Fiji Land Use Land Cover Test Dataset. https://pacificdata.org/data/dataset/fiji-land-use-land-cover-test-dataset.
 - Landesamt für Vermessung und Geobasisinformationen Rheinland-Pfalz (2005 – 2010). Digitales Basislandschaftsmodell (Basis-DLM). https://lvermgeo.rlp.de/produkte/geotopografie/digitale-landschaftsmodelle-dlm/digitales-basislandschaftsmodell-basis-dlm.
 - Meyer, H., & Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. Methods in Ecology and Evolution, 12(9), 1620 – 1633. https://doi.org/10.1111/2041-210X.13650.
 - Schumacher, F., et al. (2024 (a)). The CAST Package for Training Assessment of Spatial Prediction Models in R. https://doi.org/10.48550/arXiv.2404.06978.
