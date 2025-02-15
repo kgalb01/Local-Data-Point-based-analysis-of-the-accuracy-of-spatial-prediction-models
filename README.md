@@ -1,5 +1,5 @@
 # Local Data Point-based analysis of the accuracy of spatial prediction models 
-This work aims to evaluate the accuracy of spatial prediction models using the "Local Data Point Density" (F. Schumacher et al., 2024) and therefore proving the functionality of the "LPD" and it's advantages as a extension of the "Disimilarity Index" (H. Meyer, E. Pebesma, 2021). The purpose of this GitHub Page is to grant further insides into the methodology of the study. It is supposed to give a quick overview of the project, summarising the results. The uploaded code is slightly modified and for the sake of reproducibility every used function is seeded. In order to improve readability of the code, some parts will be removed (e.g. where the same command is repeated several times to get the same result for each case study area). For further questions feel free to contact me: k_galb01@uni-muenster.de
+This work aims to evaluate the accuracy of spatial prediction models using the "Local Data Point Density" (Schumacher et al., 2024) and therefore proving the functionality of the "LPD" and it's advantages as a extension of the "Disimilarity Index" (Meyer & Pebesma, 2021). The purpose of this GitHub Page is to grant further insides into the methodology of the study. It is supposed to give a quick overview of the project, summarising the results. The uploaded code is slightly modified and for the sake of reproducibility every used function is seeded. In order to improve readability of the code, some parts will be removed (e.g. where the same command is repeated several times to get the same result for each case study area). For further questions feel free to contact me: k_galb01@uni-muenster.de
 
 ## Motivation
 - Machine learning is now a mainstream technology, used beyond just scientific applications.
@@ -73,3 +73,5 @@ Figure 1: Diagram illustrating how the LPD works (Source: Schumacher, F. (2023).
 
 
 ## Bibliography
+- Meyer, H., & Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. Methods in Ecology and Evolution, 12(9), 1620 – 1633. https://doi.org/10.1111/2041- 210X.13650.
+- Schumacher, F., et al. (2024). The CAST Package for Training Assessment of Spatial Prediction Models in R. https://doi.org/10.48550/arXiv.2404.06978.
