@@ -1,17 +1,17 @@
 # Local Data Point-based analysis of the accuracy of spatial prediction models 
-This work aims to evaluate the accuracy of spatial prediction models using the "Local Data Point Density" (Schumacher et al., 2024) and therefore proving the functionality of the "LPD" and it's advantages as a extension of the "Disimilarity Index" (Meyer & Pebesma, 2021). The purpose of this GitHub Page is to grant further insides into the methodology of the study. It is supposed to give a quick overview of the project, summarising the results. The uploaded code is slightly modified and for the sake of reproducibility every used function is seeded. In order to improve readability of the code, some parts will be removed (e.g. where the same command is repeated several times to get the same result for each case study area). For further questions feel free to contact me: k_galb01@uni-muenster.de
+This work aims to evaluate the accuracy of spatial prediction models using the "Local Data Point Density" (Schumacher et al., 2024 (a)) and therefore proving the functionality of the "LPD" and it's advantages as a extension of the "Disimilarity Index" (Meyer & Pebesma, 2021). The purpose of this GitHub Page is to grant further insides into the methodology of the study. It is supposed to give a quick overview of the project, summarising the results. The uploaded code is slightly modified and for the sake of reproducibility every used function is seeded. In order to improve readability of the code, some parts will be removed (e.g. where the same command is repeated several times to get the same result for each case study area). For further questions feel free to contact me: k_galb01@uni-muenster.de
 
 ## Motivation
 - Machine learning is now a mainstream technology, used beyond just scientific applications.
 - In geoscience, it helps predict spatial processes and calculate land use classifications.
 - The "Area of Applicability" (AOA) determines where models can be applied reliably, by setting a threshold for the "Dissimilarity Index" (DI) (Meyer & Pebesma, 2021).
 - The DI calculates the Euclidian distance between a new data point and a training data point, assuming that for more similarities between a model is to the new data, the model is able to create more reliable predictions (Meyer & Pebesma, 2021).
-- The "Local Data Point Density" (LPD) improves AOA by considering both distance and data density, enhancing model accuracy in clustered areas (Schumacher et al., 2024).
+- The "Local Data Point Density" (LPD) improves AOA by considering both distance and data density, enhancing model accuracy in clustered areas (Schumacher et al., 2024 (a)).
 - This study evaluates LPD's effectiveness in improving spatial prediction models.
 
 ![Diagram illustrating how the LPD works](example/misc/lpd_diagram_screenshot.jpg)
 
-Figure 1: Diagram illustrating how the LPD works (Source: Schumacher, F. (2023). Development of a local data point density approach to assess the area of applicability for spatial prediction models.)
+Figure 1: Diagram illustrating how the LPD works (Source: Schumacher et al., 2024 (b). Development of a local data point density approach to assess the area of applicability for spatial prediction models.)
 
 ## Case Study
 - The Fiji Islands, Rhineland-Palatinate (RLP), and Germany were chosen as case study areas to evaluate the LPD approach across diverse landscapes and test the transferability of the model.
@@ -73,5 +73,7 @@ Figure 1: Diagram illustrating how the LPD works (Source: Schumacher, F. (2023).
 
 
 ## Bibliography
+- Landesamt für Vermessung und Geobasisinformationen Rheinland-Pfalz (2005 – 2010). Digitales Basislandschaftsmodell (Basis-DLM). https://lvermgeo.rlp.de/produkte/geotopografie/digitale-landschaftsmodelle-dlm/digitales-basislandschaftsmodell-basis-dlm.
 - Meyer, H., & Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. Methods in Ecology and Evolution, 12(9), 1620 – 1633. https://doi.org/10.1111/2041-210X.13650.
-- Schumacher, F., et al. (2024). The CAST Package for Training Assessment of Spatial Prediction Models in R. https://doi.org/10.48550/arXiv.2404.06978.
+- Schumacher, F., et al. (2024 (a)). The CAST Package for Training Assessment of Spatial Prediction Models in R. https://doi.org/10.48550/arXiv.2404.06978.
+- Schumacher, F., et al. (2024 (b)). Assessing the area of applicability of spatial prediction models through a local data point density approach. https://www.egu.eu/media/awards/posters/2024/08/30/cc57f0ad-37c0-4065-8259-e0f56b49f40b.pdf.
