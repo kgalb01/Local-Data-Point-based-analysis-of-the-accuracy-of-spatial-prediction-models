@@ -73,5 +73,5 @@ Figure 1: Diagram illustrating how the LPD works (Source: Schumacher, F. (2023).
 
 
 ## Bibliography
-- Meyer, H., & Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. Methods in Ecology and Evolution, 12(9), 1620 – 1633. https://doi.org/10.1111/2041- 210X.13650.
+- Meyer, H., & Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. Methods in Ecology and Evolution, 12(9), 1620 – 1633. https://doi.org/10.1111/2041-210X.13650.
 - Schumacher, F., et al. (2024). The CAST Package for Training Assessment of Spatial Prediction Models in R. https://doi.org/10.48550/arXiv.2404.06978.
