@@ -11,7 +11,7 @@ This work aims to evaluate the accuracy of spatial prediction models using the "
 
 ![Diagram illustrating how the LPD works](example/misc/lpd_diagram_screenshot.jpg)
 
-Figure 1: Diagram illustrating how the LPD works (Source: Schumacher et al., 2024 (b). Development of a local data point density approach to assess the area of applicability for spatial prediction models.)
+Figure 1: Diagram illustrating how the LPD works (Source: Schumacher et al., 2024 (b)). Development of a local data point density approach to assess the area of applicability for spatial prediction models.)
 
 ## Case Study
 - The Fiji Islands, Rhineland-Palatinate (RLP), and Germany were chosen as case study areas to evaluate the LPD approach across diverse landscapes and test the transferability of the model.
